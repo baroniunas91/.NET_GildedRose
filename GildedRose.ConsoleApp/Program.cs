@@ -1,6 +1,4 @@
 ﻿using GildedRose.ConsoleApp.Services;
-using System;
-using System.Collections.Generic;
 
 namespace GildedRose.ConsoleApp
 {

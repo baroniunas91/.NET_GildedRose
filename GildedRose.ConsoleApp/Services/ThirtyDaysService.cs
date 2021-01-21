@@ -1,13 +1,9 @@
 ﻿using GildedRose.ConsoleApp.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GildedRose.ConsoleApp.Services
 {
-    public class ThirtyDaysService
+    public class ThirtyDaysService : IThirtyDaysService
     {
         private readonly IPrinter _printService;
         private readonly IDayService _dayService;
