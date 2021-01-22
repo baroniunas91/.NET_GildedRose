@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GildedRose.ConsoleApp.Services
 {
-    public class ThirtyDaysService : IThirtyDaysService
+    public class ThirtyDaysService
     {
         private readonly IPrinter _printService;
         private readonly IDayService _dayService;

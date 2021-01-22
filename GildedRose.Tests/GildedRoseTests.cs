@@ -76,5 +76,27 @@ namespace GildedRose.Tests
             item.SellIn.Should().Be(sellInShouldBe);
             item.Quality.Should().Be(qualityShouldBe);
         }
+
+        [Theory]
+        [InlineData(0, 80, 0, 80)]
+        [InlineData(-1, 80, -1, 80)]
+        public void TestSulfurasItem(int sellInShouldBe, int qualityShouldBe, int currentSellIn, int currentQuality)
+        {
+            //Arrange
+            var itemService = new ItemService();
+            var agedBrieService = new AgedBrieService(itemService);
+            var backstageService = new BackstageService(itemService);
+            var normalItemService = new NormalItemService(itemService);
+            var conjuredItemService = new ConjuredItemService(itemService);
+            IList<Item> Items = new List<Item>{
+                new Item {Name = "Sulfuras, Hand of Ragnaros", SellIn = currentSellIn, Quality = currentQuality},
+            };
+            var app = new GildedRoseClass(Items, agedBrieService, backstageService, normalItemService, conjuredItemService);
+            //Act
+            app.UpdateQuality();
+            //Assert
+            Items[0].SellIn.Should().Be(sellInShouldBe);
+            Items[0].Quality.Should().Be(qualityShouldBe);
+        }
     }
 }

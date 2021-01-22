@@ -5,7 +5,7 @@ namespace GildedRose.ConsoleApp
 {
     public class GildedRoseClass
     {
-        public IList<Item> Items { get; set; }
+        private IList<Item> _items;
         private readonly AgedBrieService _agedBrieService;
         private readonly BackstageService _backstageService;
         private readonly NormalItemService _normalItemService;
@@ -13,7 +13,7 @@ namespace GildedRose.ConsoleApp
 
         public GildedRoseClass(IList<Item> Items, AgedBrieService agedBrieService, BackstageService backstageService, NormalItemService normalItemService, ConjuredItemService conjuredItemService)
         {
-            this.Items = Items;
+            _items = Items;
             _agedBrieService = agedBrieService;
             _backstageService = backstageService;
             _normalItemService = normalItemService;
@@ -22,7 +22,7 @@ namespace GildedRose.ConsoleApp
 
         public void UpdateQuality()
         {
-            foreach (Item item in Items)
+            foreach (Item item in _items)
             {
                 switch(item.Name)
                 {
@@ -34,6 +34,9 @@ namespace GildedRose.ConsoleApp
                         break;
                     case "Conjured Mana Cake":
                         _conjuredItemService.UpdateQuality(item);
+                        break;
+                    case "Sulfuras, Hand of Ragnaros":
+                        //Ignored
                         break;
                     default:
                         _normalItemService.UpdateQuality(item);
