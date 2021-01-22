@@ -1,5 +1,6 @@
+using FluentAssertions;
 using GildedRose.ConsoleApp;
-using System;
+using GildedRose.ConsoleApp.Services;
 using System.Collections.Generic;
 using Xunit;
 
@@ -7,24 +8,73 @@ namespace GildedRose.Tests
 {
     public class GildedRoseTests
     {
-        [Fact]
-        public void foo()
+        [Theory]
+        [InlineData(1, 1, 2, 0)]
+        [InlineData(-1, 12, 0, 10)]
+        [InlineData(-6, 50, -5, 50)]
+        public void TestAgedBrieService(int sellInShouldBe, int qualityShouldBe, int currentSellIn, int currentQuality)
         {
-            IList<Item> Items = new List<Item> {
-                new Item {Name = "+5 Dexterity Vest", SellIn = 10, Quality = 20},
-                new Item {Name = "Aged Brie", SellIn = 2, Quality = 0},
-                new Item {Name = "Elixir of the Mongoose", SellIn = 5, Quality = 7},
-                new Item {Name = "Sulfuras, Hand of Ragnaros", SellIn = 0, Quality = 80},
-                new Item {Name = "Sulfuras, Hand of Ragnaros", SellIn = -1, Quality = 80},
-                new Item {Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 15, Quality = 20},
-                new Item {Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 10, Quality = 49},
-                new Item {Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 5, Quality = 49},
-            };
-            GildedRoseClass app = new GildedRoseClass(Items);
-            app.UpdateQuality();
-            Assert.Equal("+5 Dexterity Vest", Items[0].Name);
-            Assert.Equal(9, Items[0].SellIn);
-            Assert.Equal(19, Items[0].Quality);
+            //Arrange
+            var itemService = new ItemService();
+            var agedBrieService = new AgedBrieService(itemService);
+            Item item = new Item() { Name = "Aged Brie", SellIn = currentSellIn, Quality = currentQuality };
+            //Act
+            agedBrieService.UpdateQuality(item);
+            //Assert
+            item.SellIn.Should().Be(sellInShouldBe);
+            item.Quality.Should().Be(qualityShouldBe);
+        }
+
+        [Theory]
+        [InlineData(12, 23, 13, 22)]
+        [InlineData(-1, 0, 0, 50)]
+        [InlineData(6, 33, 7, 31)]
+        [InlineData(1, 47, 2, 44)]
+        public void TestBackStageService(int sellInShouldBe, int qualityShouldBe, int currentSellIn, int currentQuality)
+        {
+            //Arrange
+            var itemService = new ItemService();
+            var backstageService = new BackstageService(itemService);
+            Item item = new Item { Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = currentSellIn, Quality = currentQuality };
+            //Act
+            backstageService.UpdateQuality(item);
+            //Assert
+            item.SellIn.Should().Be(sellInShouldBe);
+            item.Quality.Should().Be(qualityShouldBe);
+        }
+
+        [Theory]
+        [InlineData(7, 17, 8, 18)]
+        [InlineData(-1, 8, 0, 10)]
+        [InlineData(-19, 0, -18, 0)]
+        public void TestNormalItemService(int sellInShouldBe, int qualityShouldBe, int currentSellIn, int currentQuality)
+        {
+            //Arrange
+            var itemService = new ItemService();
+            var normalItemService = new NormalItemService(itemService);
+            Item item = new Item() { Name = "+5 Dexterity Vest", SellIn = currentSellIn, Quality = currentQuality };
+            //Act
+            normalItemService.UpdateQuality(item);
+            //Assert
+            item.SellIn.Should().Be(sellInShouldBe);
+            item.Quality.Should().Be(qualityShouldBe);
+        }
+
+        [Theory]
+        [InlineData(0, 2, 1, 4)]
+        [InlineData(-2, 6, -1, 10)]
+        [InlineData(-8, 0, -7, 0)]
+        public void TestConjuredItemService(int sellInShouldBe, int qualityShouldBe, int currentSellIn, int currentQuality)
+        {
+            //Arrange
+            var itemService = new ItemService();
+            var conjuredItemService = new ConjuredItemService(itemService);
+            Item item = new Item() { Name = "Conjured Mana Cake", SellIn = currentSellIn, Quality = currentQuality };
+            //Act
+            conjuredItemService.UpdateQuality(item);
+            //Assert
+            item.SellIn.Should().Be(sellInShouldBe);
+            item.Quality.Should().Be(qualityShouldBe);
         }
     }
 }
